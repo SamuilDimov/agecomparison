@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Unremembered – Face Reflection</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #ddd;
+    }
+
+    #webcam {
+      width: 300px;
+      border: 3px solid #888;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    #photoBox {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border: 3px solid #444;
+      margin-top: 12px;
+      border-radius: 8px;
+      transition: opacity 0.6s ease;
+    }
+
+    #photoBox.missing {
+      filter: grayscale(100%) blur(1px);
+      opacity: 0.6;
+    }
+
+    #statusBox {
+      max-width: 400px;
+      margin-top: 20px;
+      text-align: center;
+      white-space: pre-line;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 15px;
+      color: #ffcccc;
+    }
+
+    @keyframes pulseScan {
+      0% { color: #ffcccc; }
+      50% { color: #ffffff; }
+      100% { color: #ffcccc; }
+    }
+
+    .scanning {
+      animation: pulseScan 1s infinite;
+    }
+  </style>
+</head>
+<body>
+  <video id="webcam" autoplay muted playsinline></video>
+  <img id="photoBox" src="/images/question.png" alt="Matched face" onerror="this.src='/images/question.png'" />
+  <div id="statusBox">Initializing face scan...</div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
