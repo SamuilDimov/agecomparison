@@ -17,10 +17,10 @@ reflectBtn.addEventListener('click', () => {
 restartBtn.addEventListener('click', () => {
   restartBtn.style.display = 'none';
   photoBox.classList.remove('loaded', 'missing');
-  updateStatus('🔄 Restarting...');
-  setTimeout(() => {
-    scanUserAge();
-  }, 600);
+  photoBox.src = '/images/question.png';
+  webcamWrapper.classList.remove('lifted');
+  statusBox.classList.remove('visible');
+  scanUserAge();
 });
 
 function startScanner() {
@@ -57,7 +57,7 @@ function updateStatus(text) {
 }
 
 function scanUserAge() {
-  let scanTime = 5000;
+  let scanTime = 2000; // 2 seconds
   let ageSum = 0;
   let count = 0;
 
@@ -68,8 +68,7 @@ function scanUserAge() {
   const interval = setInterval(async () => {
     try {
       const detection = await faceapi.detectSingleFace(video, new faceapi.SsdMobilenetv1Options())
-        .withAgeAndGender()
-        .withFaceExpressions();
+        .withAgeAndGender();
       if (detection) {
         ageSum += detection.age;
         count++;
@@ -77,7 +76,7 @@ function scanUserAge() {
     } catch (err) {
       console.warn("Detection error:", err);
     }
-  }, 500);
+  }, 400);
 
   setTimeout(() => {
     clearInterval(interval);
@@ -132,7 +131,7 @@ function showArchiveMessage(age) {
   const match = sampleMatches[closest];
   const imgSrc = match.img ? `/images/${match.img}` : '/images/question.png';
 
-  photoBox.classList.remove('missing', 'loaded');
+  photoBox.classList.remove('loaded', 'missing');
   photoBox.style.opacity = 0;
 
   photoBox.onload = () => {
@@ -154,11 +153,4 @@ function showArchiveMessage(age) {
 
   webcamWrapper.classList.add('lifted');
   restartBtn.style.display = 'inline-block';
-
-  setTimeout(() => {
-    restartBtn.style.display = 'none';
-    photoBox.classList.remove('loaded', 'missing');
-    updateStatus('🔄 Ready for next visitor...');
-    scanUserAge();
-  }, 10000);
 }
